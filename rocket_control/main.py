@@ -1,20 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def signal(input, Kp, Ki, Kd):
-    global Err, Summ_Err, prev_Err
-    global Goal, h
-
-    Err = input - Goal
-    Summ_Err += Err * h
-    dErr = (Err - prev_Err) / h
-    prev_Err = Err
-    P = Err * Kp
-    I = Summ_Err * Ki
-    D = dErr * Kd
-
-    return P + I + D
-
 N = 1406
 Cwv = np.empty(N)
 Cww = np.empty(N)
@@ -41,15 +27,14 @@ uc = 0
 duc = 0
 dduc = 0
 v = 0
+y = 0
 dv = 0
 w = 0
 dw = 0
 ddw = 0
 t = 0
-eps = 0.7
-w_autos = 0.023
-t1 = 0.21
-t2 = 0.02
+t1 = 0.28
+t2 = 0.04
 
 X = []
 Y = []
@@ -58,28 +43,23 @@ K = []
 A = []
 B = []
 
-Goal = 0.0
+a0 = 2
+a1 = 3.5
+a2 = 0.0003
+a3 = 10*a2
 
-Kpw = 0.02
-Kiw = 0.005
-Kdw = 1
-
-Kpv = 0.0
-Kiv = 0.0
-Kdv = 0.0
-
-Err = 0.0
-Summ_Err = 0.0
-prev_Err = 0.0
 
 for i in range(N):
     dv = Cvv[i] * Wind[i] - Cvw[i] * w - Cvv[i] * v + Cvb[i] * uc
     ddw = Cwv[i] * Wind[i] - Cww[i] * w - Cwv[i] * v - Cwb[i] * uc
 
-    dduc = signal(dw, Kpw, Kiw, Kdw)
+    dduc = (-t1*duc - uc + a0*w + a1*dw + a2*y * a3*v)/t2
+    #dduc = signal(dw, Kpw, Kiw, Kdw)
 
 
     v += h * dv
+    y += h * v
+
     dw += h * ddw
     w += h * dw
     t += h
