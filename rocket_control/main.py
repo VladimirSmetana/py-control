@@ -43,14 +43,14 @@ K = []
 A = []
 B = []
 
-a0 = 2
-a1 = 3.5
+a0 = 4
+a1 = 3
 a2 = 0.0003
 a3 = 10*a2
 
 
 for i in range(N):
-    dv = Cvv[i] * Wind[i] - Cvw[i] * w - Cvv[i] * v + Cvb[i] * uc
+    dv =  Cvv[i] * Wind[i] - Cvw[i] * w - Cvv[i] * v + Cvb[i] * uc
     ddw = Cwv[i] * Wind[i] - Cww[i] * w - Cwv[i] * v - Cwb[i] * uc
 
     dduc = (-t1*duc - uc + a0*w + a1*dw + a2*y * a3*v)/t2
@@ -78,27 +78,28 @@ for i in range(N):
     if duc < -1/57.3:
         duc = -1/57.3
 
-    X.append(float(t))
-    Y.append(float(v))
+    if t>80:
+        X.append(float(t))
+        Y.append(float(v))
 
-    Z.append(float(t))
-    K.append(float(w*57.3))
+        Z.append(float(t))
+        K.append(float(w*57.3))
 
-    A.append(float(t))
-    B.append(float(uc*57.3))
+        A.append(float(t))
+        B.append(float(uc*57.3))
 
     print(dduc*57.3, "____ dduc|duc ____", duc*57.3)
 
-plt.subplot(1, 3, 1)
+plt.subplot(3, 1, 1)
 plt.plot(X, Y)
-plt.title("V")
+plt.title("Скорость")
 
-plt.subplot(1, 3, 2)
+plt.subplot(3, 1, 2)
 plt.plot(Z, K)
-plt.title("W")
+plt.title("Угол тангажа")
 
-plt.subplot(1, 3, 3)
+plt.subplot(3, 1, 3)
 plt.plot(A, B)
-plt.title("b")
+plt.title("Угол поворота двигателей")
 
 plt.show()
