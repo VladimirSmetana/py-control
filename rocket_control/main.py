@@ -33,8 +33,8 @@ w = 0
 dw = 0
 ddw = 0
 t = 0
-t1 = 0.28
-t2 = 0.04
+t1 = 0.43
+t2 = 0.1
 
 X = []
 Y = []
@@ -43,9 +43,12 @@ K = []
 A = []
 B = []
 
-a0 = 4
-a1 = 3
-a2 = 0.0003
+zerX = []
+zerY = []
+
+a0 = 0.6
+a1 = 0.6
+a2 = 0.0004
 a3 = 10*a2
 
 
@@ -72,15 +75,15 @@ for i in range(N):
     if uc < -5/57.3:
         uc = -5/57.3
 
-    if duc > 1/57.3:
-        duc = 1/57.3
+    #if duc > 1/57.3:
+    #    duc = 1/57.3
 
-    if duc < -1/57.3:
-        duc = -1/57.3
+    #if duc < -1/57.3:
+    #    duc = -1/57.3
 
     if t>80:
         X.append(float(t))
-        Y.append(float(v))
+        Y.append(float(y))
 
         Z.append(float(t))
         K.append(float(w*57.3))
@@ -88,18 +91,24 @@ for i in range(N):
         A.append(float(t))
         B.append(float(uc*57.3))
 
+        zerY.append(float(0))
+        zerX.append(float(t))
+
     print(dduc*57.3, "____ dduc|duc ____", duc*57.3)
 
 plt.subplot(3, 1, 1)
 plt.plot(X, Y)
-plt.title("Скорость")
+plt.plot(zerX, zerY)
+plt.title("Перемещение")
 
 plt.subplot(3, 1, 2)
 plt.plot(Z, K)
+plt.plot(zerX, zerY)
 plt.title("Угол тангажа")
 
 plt.subplot(3, 1, 3)
 plt.plot(A, B)
+plt.plot(zerX, zerY)
 plt.title("Угол поворота двигателей")
 
 plt.show()
